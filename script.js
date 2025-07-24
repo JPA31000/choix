@@ -1,163 +1,155 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- PERSONNALISATION ---
-    // Remplacez les noms ci-dessous par votre liste de 15 élèves
-    const eleves = [
-        "Léa", "Hugo", "Chloé", "Lucas", "Manon", "Louis", "Jade", "Gabriel",
-        "Emma", "Adam", "Louise", "Raphaël", "Inès", "Jules", "Camille"
-    ];
+    // Données des élèves, maintenant correctement assignées aux groupes.
+    const groupes = {
+        "Groupe 1": [
+            "AJENGUI Adam", "ALI Arna", "BORIN Edith", "CAMARA Ibrahima", 
+            "CHACHUAT-BRENAS Flora", "CIULIN Ruti Bianca", "JIMENEZ TABORLA Luis", 
+            "MALUNDA Débora", "Amir", "José", "Janaeel"
+        ],
+        "Groupe 2": [
+            "BEJI Kaïna", "DAOUDA Ortence", "MHAMDI Ayoub", "NDIAYE Baba", 
+            "QADER Nawel", "RIGOUSTE Noemy", "ROCHE Emma", "SAHIN Béna", 
+            "TEKIN Sabri", "WADE Diadie", "YAHOUI Ilyess", "ZINGILA Andréas", "PETERSON"
+        ],
+        "Groupe 3": [
+            "BELAAGRADI Sheryne", "FALL SEYE Dame", "GIMENEZ Lenny", "KHOYA Néma", 
+            "LABEUR Ilana", "LAFFONT Jordan", "MABILLE Teiki", "MAHBOUB Kenza", 
+            "MOUTONNET-OLIVEIRA Yoni", "OUSSENI Ethan", "SAHIN Mina", "TALON Heather", 
+            "TAZABAEV Tamirlan", "TEKIN Sami"
+        ]
+    };
 
     // --- ÉLÉMENTS DE LA PAGE ---
+    const groupSelector = document.getElementById('group-selector');
     const listeElevesEl = document.getElementById('liste-eleves-interactive');
     const resultatContenuEl = document.getElementById('resultat-contenu');
-
-    // Contrôles du tirage simple
     const btnTirageSimple = document.getElementById('btn-tirage-simple');
     const nombreGagnantsInput = document.getElementById('nombre-gagnants');
-
-    // Contrôles de la création de groupes
     const btnCreerGroupes = document.getElementById('btn-creer-groupes');
     const valeurGroupeInput = document.getElementById('valeur-groupe');
 
     // --- FONCTIONS ---
 
     /**
-     * Récupère la liste des élèves cochés (présents).
-     * @returns {string[]} Un tableau contenant les noms des élèves présents.
+     * Crée la liste interactive d'élèves avec des cases à cocher.
+     * @param {string[]} eleves Le tableau des noms d'élèves à afficher.
      */
-    function getElevesPresents() {
-        const presents = [];
-        const checkboxes = document.querySelectorAll('#liste-eleves-interactive input[type="checkbox"]:checked');
-        checkboxes.forEach(checkbox => {
-            presents.push(checkbox.value);
-        });
-        return presents;
-    }
-
-    /**
-     * Mélange un tableau en utilisant l'algorithme de Fisher-Yates.
-     * @param {any[]} array Le tableau à mélanger.
-     * @returns {any[]} Un nouveau tableau mélangé.
-     */
-    function melangerArray(array) {
-        const newArray = [...array]; // Crée une copie pour ne pas modifier l'original
-        for (let i = newArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // Swap
-        }
-        return newArray;
-    }
-
-    /**
-     * Crée la liste interactive avec des cases à cocher.
-     */
-    function creerListeInteractive() {
+    function creerListeInteractive(eleves) {
         listeElevesEl.innerHTML = '';
         eleves.forEach((nom, index) => {
             const li = document.createElement('li');
+            const checkboxId = `eleve-${index}`;
             
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = `eleve-${index}`;
-            checkbox.value = nom;
-            checkbox.checked = true; // Tous les élèves sont présents par défaut
-
-            const label = document.createElement('label');
-            label.htmlFor = `eleve-${index}`;
-            label.textContent = nom;
-
-            li.appendChild(checkbox);
-            li.appendChild(label);
+            li.innerHTML = `
+                <input type="checkbox" id="${checkboxId}" value="${nom}" checked>
+                <label for="${checkboxId}">${nom}</label>
+            `;
             listeElevesEl.appendChild(li);
         });
     }
 
     /**
-     * Lance le tirage au sort simple sur les élèves présents.
+     * Met à jour l'affichage en fonction du groupe sélectionné.
      */
+    function mettreAJourAffichage() {
+        const selectedGroup = groupSelector.value;
+        let elevesAAfficher = [];
+
+        if (selectedGroup === "Tous") {
+            // Concatène tous les groupes en une seule liste
+            elevesAAfficher = Object.values(groupes).flat();
+        } else {
+            elevesAAfficher = groupes[selectedGroup];
+        }
+        
+        creerListeInteractive(elevesAAfficher.sort()); // Trie par ordre alphabétique pour plus de clarté
+        resultatContenuEl.innerHTML = '<p>Les résultats s\'afficheront ici...</p>';
+    }
+
+    /**
+     * Initialise le menu de sélection des groupes.
+     */
+    function initialiserSelecteurGroupe() {
+        // Ajoute l'option pour voir tous les élèves
+        groupSelector.innerHTML = '<option value="Tous">Tous les groupes</option>';
+        
+        // Ajoute une option pour chaque groupe
+        Object.keys(groupes).forEach(nomGroupe => {
+            const option = document.createElement('option');
+            option.value = nomGroupe;
+            option.textContent = nomGroupe;
+            groupSelector.appendChild(option);
+        });
+    }
+
+    function getElevesPresents() {
+        return Array.from(document.querySelectorAll('#liste-eleves-interactive input:checked')).map(cb => cb.value);
+    }
+    
+    function melangerArray(array) {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    }
+
     function lancerTirageSimple() {
-        const elevesPresents = getElevesPresents(); // Utilise la liste des présents
+        const elevesPresents = getElevesPresents();
         const nombreGagnants = parseInt(nombreGagnantsInput.value, 10);
 
-        if (elevesPresents.length === 0) {
-            alert("Aucun élève n'est sélectionné !");
-            return;
-        }
+        if (elevesPresents.length === 0) return alert("Aucun élève n'est sélectionné !");
         if (nombreGagnants <= 0 || nombreGagnants > elevesPresents.length) {
-            alert(`Veuillez entrer un nombre de gagnants valide (entre 1 et ${elevesPresents.length}).`);
-            return;
+            return alert(`Veuillez entrer un nombre de gagnants valide (entre 1 et ${elevesPresents.length}).`);
         }
 
-        const elevesMelanges = melangerArray(elevesPresents);
-        const gagnants = elevesMelanges.slice(0, nombreGagnants);
-
+        const gagnants = melangerArray(elevesPresents).slice(0, nombreGagnants);
         resultatContenuEl.innerHTML = `<h3>🏆 Gagnant(s) :</h3><ul>${gagnants.map(nom => `<li>${nom}</li>`).join('')}</ul>`;
     }
 
-    /**
-     * Forme des groupes à partir des élèves présents.
-     */
     function formerLesGroupes() {
-        const elevesPresents = getElevesPresents(); // Utilise la liste des présents
+        const elevesPresents = getElevesPresents();
         const mode = document.querySelector('input[name="mode-groupe"]:checked').value;
         const valeur = parseInt(valeurGroupeInput.value, 10);
 
-        if (elevesPresents.length === 0) {
-            alert("Aucun élève n'est sélectionné pour former des groupes !");
-            return;
-        }
-        if (valeur <= 0) {
-            alert("Veuillez entrer une valeur positive.");
-            return;
-        }
+        if (elevesPresents.length === 0) return alert("Aucun élève pour former des groupes !");
+        if (valeur <= 0) return alert("Veuillez entrer une valeur positive.");
 
         const elevesMelanges = melangerArray(elevesPresents);
-        let groupes = [];
+        let groupesResultat = [];
 
         if (mode === 'parTaille') {
-            if (valeur > elevesPresents.length) {
-                alert("La taille des groupes ne peut pas être supérieure au nombre d'élèves présents.");
-                return;
-            }
+            if (valeur > elevesPresents.length) return alert("La taille des groupes est trop grande.");
             for (let i = 0; i < elevesMelanges.length; i += valeur) {
-                groupes.push(elevesMelanges.slice(i, i + valeur));
+                groupesResultat.push(elevesMelanges.slice(i, i + valeur));
             }
-        } else { // mode === 'parNombre'
-            if (valeur > elevesPresents.length) {
-                alert("Le nombre de groupes ne peut pas être supérieur au nombre d'élèves présents.");
-                return;
-            }
-            // Réinitialiser les groupes
-            groupes = Array.from({ length: valeur }, () => []);
-            // Distribuer les élèves dans les groupes
-            elevesMelanges.forEach((eleve, index) => {
-                groupes[index % valeur].push(eleve);
-            });
+        } else { // parNombre
+            if (valeur > elevesPresents.length) return alert("Le nombre de groupes est trop grand.");
+            groupesResultat = Array.from({ length: valeur }, () => []);
+            elevesMelanges.forEach((eleve, index) => groupesResultat[index % valeur].push(eleve));
         }
         
-        afficherGroupes(groupes);
+        afficherGroupes(groupesResultat);
     }
 
-    /**
-     * Affiche les groupes formatés dans la zone de résultat.
-     * @param {string[][]} groupes Un tableau de tableaux contenant les membres de chaque groupe.
-     */
-    function afficherGroupes(groupes) {
-        let html = '';
-        groupes.forEach((groupe, index) => {
-            html += `<div class="groupe"><h3>Groupe ${index + 1}</h3><ul>`;
-            groupe.forEach(membre => {
-                html += `<li>${membre}</li>`;
-            });
-            html += `</ul></div>`;
-        });
+    function afficherGroupes(groupesResultat) {
+        let html = groupesResultat.map((groupe, index) => `
+            <div class="groupe">
+                <h3>Groupe ${index + 1}</h3>
+                <ul>${groupe.map(membre => `<li>${membre}</li>`).join('')}</ul>
+            </div>
+        `).join('');
         resultatContenuEl.innerHTML = html;
     }
 
     // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
+    groupSelector.addEventListener('change', mettreAJourAffichage);
     btnTirageSimple.addEventListener('click', lancerTirageSimple);
     btnCreerGroupes.addEventListener('click', formerLesGroupes);
 
     // --- INITIALISATION ---
-    // Crée la liste interactive des élèves au chargement de la page.
-    creerListeInteractive();
+    initialiserSelecteurGroupe();
+    mettreAJourAffichage(); // Affiche la liste initiale ("Tous les groupes")
 });
