@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirage au sort Élèves</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Outil de Tirage au Sort</h1>
+        <p>Gérez vos tirages et groupes d'élèves facilement.</p>
+        
+        <div class="liste-eleves-container">
+            <h2>Sélection des élèves présents</h2>
+            <p class="instructions">Décochez les élèves absents avant de lancer le tirage.</p>
+            <ul id="liste-eleves-interactive">
+                </ul>
+        </div>
+
+        <div class="actions">
+            <div class="action-card">
+                <h2>🥇 Tirage au sort simple</h2>
+                <label for="nombre-gagnants">Nombre de personnes à tirer :</label>
+                <input type="number" id="nombre-gagnants" value="1" min="1">
+                <button id="btn-tirage-simple">Lancer le tirage</button>
+            </div>
+
+            <div class="action-card">
+                <h2>🧑‍🤝‍🧑 Créer des groupes</h2>
+                <div class="group-options">
+                    <input type="radio" id="option-nombre-groupes" name="mode-groupe" value="parNombre" checked>
+                    <label for="option-nombre-groupes">Nombre de groupes :</label>
+                    <br>
+                    <input type="radio" id="option-taille-groupes" name="mode-groupe" value="parTaille">
+                    <label for="option-taille-groupes">Nombre d'élèves par groupe :</label>
+                </div>
+                <input type="number" id="valeur-groupe" value="3" min="2">
+                <button id="btn-creer-groupes">Former les groupes</button>
+            </div>
+        </div>
+
+        <div id="resultat">
+            <h2>Résultats</h2>
+            <div id="resultat-contenu">
+                <p>Les résultats s'afficheront ici...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
