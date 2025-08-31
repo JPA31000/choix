@@ -4,22 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const classes = {
         "2EMNB": {
             "Groupe 1": [
-                "AJENGUI Adam", "ALI Arna", "BORIN Edith", "CAMARA Ibrahima",
-                "CHACHUAT-BRENAS Flora", "CIULIN Ruti Bianca", "JIMENEZ TABORLA Luis",
-                "MALUNDA Débora", "Amir", "José", "Janaeel"
+                "ABDELMAJID Khadija", "BABI Nour", "BELHADI Mélissa", "BOUKHIAR Fatima",
+                "CHARLES Glory", "DESLONG Rayane Bamba", "DEVILLE Chloé", "EGLELA Orlane",
+                "EL ASRI Ayman", "HASSANI Killyann", "INSELIN Enzo"
             ],
             "Groupe 2": [
-                "BEJI Kaïna", "DAOUDA Ortence", "MHAMDI Ayoub", "NDIAYE Baba",
-                "QADER Nawel", "RIGOUSTE Noemy", "ROCHE Emma", "SAHIN Béna",
-                "TEKIN Sabri", "WADE Diadie", "YAHOUI Ilyess", "ZINGILA Andréas", "PETERSON"
+                "JILAVU Maria-Teodora", "JOJUA Giorgi", "KHACHATRIAN Angelina", "LUNIMBU Fernanda",
+                "MUNIER Kelly", "OUERFELLI Samia", "POUGIN Pharel", "QACHRI Adam",
+                "ROUQUETTE Noa", "TAYEB PACHA Romayssa", "YANG Danny"
             ]
         },
         "1AA": {
             "Groupe 1": [
-                "BELAAGRADI Sheryne", "FALL SEYE Dame", "GIMENEZ Lenny", "KHOYA Néma",
-                "LABEUR Ilana", "LAFFONT Jordan", "MABILLE Teiki", "MAHBOUB Kenza",
-                "MOUTONNET-OLIVEIRA Yoni", "OUSSENI Ethan", "SAHIN Mina", "TALON Heather",
-                "TAZABAEV Tamirlan", "TEKIN Sami"
+                "AJENGUI Adam", "BORIN Edith", "CHACHUAT-BRENAS Flora", "DAOUDA Ortence",
+                "FALL SEYE Dame", "JIMENEZ TABORDA Luis", "KORDZADZE Lizi", "MALUNDA Débora",
+                "RIGOUSTE Noemy", "ROCHE Emma", "TALON Heather", "TAZABAEV Tamirlan",
+                "WADE Diadie", "ZINGILA Andréas"
             ]
         }
     };
