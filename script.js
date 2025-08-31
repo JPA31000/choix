@@ -14,19 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 "ROUQUETTE Noa", "TAYEB PACHA Romayssa", "YANG Danny"
             ]
         },
-        "1AA": {
-            "Groupe 1": [
-                "AJENGUI Adam", "BORIN Edith", "CHACHUAT-BRENAS Flora", "DAOUDA Ortence",
-                "FALL SEYE Dame", "JIMENEZ TABORDA Luis", "KORDZADZE Lizi", "MALUNDA Débora",
-                "RIGOUSTE Noemy", "ROCHE Emma", "TALON Heather", "TAZABAEV Tamirlan",
-                "WADE Diadie", "ZINGILA Andréas"
-            ]
-        }
+        "1AA": [
+            "AJENGUI Adam", "BORIN Edith", "CHACHUAT-BRENAS Flora", "DAOUDA Ortence",
+            "FALL SEYE Dame", "JIMENEZ TABORDA Luis", "KORDZADZE Lizi", "MALUNDA Débora",
+            "RIGOUSTE Noemy", "ROCHE Emma", "TALON Heather", "TAZABAEV Tamirlan",
+            "WADE Diadie", "ZINGILA Andréas"
+        ]
     };
 
     // --- ÉLÉMENTS DE LA PAGE ---
     const classSelector = document.getElementById('class-selector');
     const groupSelector = document.getElementById('group-selector');
+    const groupSelectorContainer = document.querySelector('.group-selector-container');
     const listeElevesEl = document.getElementById('liste-eleves-interactive');
     const resultatContenuEl = document.getElementById('resultat-contenu');
     const btnTirageSimple = document.getElementById('btn-tirage-simple');
@@ -62,13 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedGroup = groupSelector.value;
         let elevesAAfficher = [];
 
-        if (selectedGroup === "Tous") {
+        if (Array.isArray(classes[selectedClass])) {
+            elevesAAfficher = classes[selectedClass];
+        } else if (selectedGroup === "Tous") {
             elevesAAfficher = Object.values(classes[selectedClass]).flat();
         } else {
             elevesAAfficher = classes[selectedClass][selectedGroup];
         }
 
-        creerListeInteractive(elevesAAfficher.sort());
+        creerListeInteractive([...elevesAAfficher].sort());
         resultatContenuEl.innerHTML = '<p>Les résultats s\'afficheront ici...</p>';
     }
 
@@ -85,6 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mettreAJourGroupes() {
         const selectedClass = classSelector.value;
+
+        if (Array.isArray(classes[selectedClass])) {
+            groupSelectorContainer.style.display = 'none';
+            mettreAJourAffichage();
+            return;
+        }
+
+        groupSelectorContainer.style.display = '';
         groupSelector.innerHTML = '<option value="Tous">Tous les groupes</option>';
         Object.keys(classes[selectedClass]).forEach(nomGroupe => {
             const option = document.createElement('option');
