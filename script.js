@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultatContenuEl.innerHTML = '<p>Les résultats s\'afficheront ici...</p>';
     }
 
-    function initialiserSelecteurClasses() {
+    function initialiserSelecteurs() {
         classSelector.innerHTML = '';
         Object.keys(classes).forEach(nomClasse => {
             const option = document.createElement('option');
@@ -80,9 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = nomClasse;
             classSelector.appendChild(option);
         });
+        mettreAJourGroupes();
     }
 
-    function mettreAJourSelecteurGroupes() {
+    function mettreAJourGroupes() {
         const selectedClass = classSelector.value;
         groupSelector.innerHTML = '<option value="Tous">Tous les groupes</option>';
         Object.keys(classes[selectedClass]).forEach(nomGroupe => {
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = nomGroupe;
             groupSelector.appendChild(option);
         });
+        mettreAJourAffichage();
     }
 
     function getElevesPresents() {
@@ -155,16 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
-    classSelector.addEventListener('change', () => {
-        mettreAJourSelecteurGroupes();
-        mettreAJourAffichage();
-    });
+    classSelector.addEventListener('change', mettreAJourGroupes);
     groupSelector.addEventListener('change', mettreAJourAffichage);
     btnTirageSimple.addEventListener('click', lancerTirageSimple);
     btnCreerGroupes.addEventListener('click', formerLesGroupes);
 
     // --- INITIALISATION ---
-    initialiserSelecteurClasses();
-    mettreAJourSelecteurGroupes();
-    mettreAJourAffichage();
+    initialiserSelecteurs();
 });
