@@ -50,6 +50,29 @@ h1, h2 {
     font-family: 'Poppins', sans-serif;
     font-size: 1em;
 }
+/* Style pour le sélecteur de classe */
+.class-selector-container {
+    margin-bottom: 25px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+.class-selector-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+#class-selector {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+}
+
 
 /* --- STYLES POUR LA LISTE INTERACTIVE --- */
 .liste-eleves-container .instructions {
