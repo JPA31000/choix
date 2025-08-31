@@ -1,26 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- PERSONNALISATION ---
-    // Données des élèves, maintenant correctement assignées aux groupes.
-    const groupes = {
-        "Groupe 1": [
-            "AJENGUI Adam", "ALI Arna", "BORIN Edith", "CAMARA Ibrahima", 
-            "CHACHUAT-BRENAS Flora", "CIULIN Ruti Bianca", "JIMENEZ TABORLA Luis", 
-            "MALUNDA Débora", "Amir", "José", "Janaeel"
-        ],
-        "Groupe 2": [
-            "BEJI Kaïna", "DAOUDA Ortence", "MHAMDI Ayoub", "NDIAYE Baba", 
-            "QADER Nawel", "RIGOUSTE Noemy", "ROCHE Emma", "SAHIN Béna", 
-            "TEKIN Sabri", "WADE Diadie", "YAHOUI Ilyess", "ZINGILA Andréas", "PETERSON"
-        ],
-        "Groupe 3": [
-            "BELAAGRADI Sheryne", "FALL SEYE Dame", "GIMENEZ Lenny", "KHOYA Néma", 
-            "LABEUR Ilana", "LAFFONT Jordan", "MABILLE Teiki", "MAHBOUB Kenza", 
-            "MOUTONNET-OLIVEIRA Yoni", "OUSSENI Ethan", "SAHIN Mina", "TALON Heather", 
-            "TAZABAEV Tamirlan", "TEKIN Sami"
-        ]
+    // Données des élèves, organisées par classes et groupes.
+    const classes = {
+        "2EMNB": {
+            "Groupe 1": [
+                "AJENGUI Adam", "ALI Arna", "BORIN Edith", "CAMARA Ibrahima",
+                "CHACHUAT-BRENAS Flora", "CIULIN Ruti Bianca", "JIMENEZ TABORLA Luis",
+                "MALUNDA Débora", "Amir", "José", "Janaeel"
+            ],
+            "Groupe 2": [
+                "BEJI Kaïna", "DAOUDA Ortence", "MHAMDI Ayoub", "NDIAYE Baba",
+                "QADER Nawel", "RIGOUSTE Noemy", "ROCHE Emma", "SAHIN Béna",
+                "TEKIN Sabri", "WADE Diadie", "YAHOUI Ilyess", "ZINGILA Andréas", "PETERSON"
+            ]
+        },
+        "1AA": {
+            "Groupe 1": [
+                "BELAAGRADI Sheryne", "FALL SEYE Dame", "GIMENEZ Lenny", "KHOYA Néma",
+                "LABEUR Ilana", "LAFFONT Jordan", "MABILLE Teiki", "MAHBOUB Kenza",
+                "MOUTONNET-OLIVEIRA Yoni", "OUSSENI Ethan", "SAHIN Mina", "TALON Heather",
+                "TAZABAEV Tamirlan", "TEKIN Sami"
+            ]
+        }
     };
 
     // --- ÉLÉMENTS DE LA PAGE ---
+    const classSelector = document.getElementById('class-selector');
     const groupSelector = document.getElementById('group-selector');
     const listeElevesEl = document.getElementById('liste-eleves-interactive');
     const resultatContenuEl = document.getElementById('resultat-contenu');
@@ -53,29 +58,34 @@ document.addEventListener('DOMContentLoaded', () => {
      * Met à jour l'affichage en fonction du groupe sélectionné.
      */
     function mettreAJourAffichage() {
+        const selectedClass = classSelector.value;
         const selectedGroup = groupSelector.value;
         let elevesAAfficher = [];
 
         if (selectedGroup === "Tous") {
-            // Concatène tous les groupes en une seule liste
-            elevesAAfficher = Object.values(groupes).flat();
+            elevesAAfficher = Object.values(classes[selectedClass]).flat();
         } else {
-            elevesAAfficher = groupes[selectedGroup];
+            elevesAAfficher = classes[selectedClass][selectedGroup];
         }
-        
-        creerListeInteractive(elevesAAfficher.sort()); // Trie par ordre alphabétique pour plus de clarté
+
+        creerListeInteractive(elevesAAfficher.sort());
         resultatContenuEl.innerHTML = '<p>Les résultats s\'afficheront ici...</p>';
     }
 
-    /**
-     * Initialise le menu de sélection des groupes.
-     */
-    function initialiserSelecteurGroupe() {
-        // Ajoute l'option pour voir tous les élèves
+    function initialiserSelecteurClasses() {
+        classSelector.innerHTML = '';
+        Object.keys(classes).forEach(nomClasse => {
+            const option = document.createElement('option');
+            option.value = nomClasse;
+            option.textContent = nomClasse;
+            classSelector.appendChild(option);
+        });
+    }
+
+    function mettreAJourSelecteurGroupes() {
+        const selectedClass = classSelector.value;
         groupSelector.innerHTML = '<option value="Tous">Tous les groupes</option>';
-        
-        // Ajoute une option pour chaque groupe
-        Object.keys(groupes).forEach(nomGroupe => {
+        Object.keys(classes[selectedClass]).forEach(nomGroupe => {
             const option = document.createElement('option');
             option.value = nomGroupe;
             option.textContent = nomGroupe;
@@ -145,11 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
+    classSelector.addEventListener('change', () => {
+        mettreAJourSelecteurGroupes();
+        mettreAJourAffichage();
+    });
     groupSelector.addEventListener('change', mettreAJourAffichage);
     btnTirageSimple.addEventListener('click', lancerTirageSimple);
     btnCreerGroupes.addEventListener('click', formerLesGroupes);
 
     // --- INITIALISATION ---
-    initialiserSelecteurGroupe();
-    mettreAJourAffichage(); // Affiche la liste initiale ("Tous les groupes")
+    initialiserSelecteurClasses();
+    mettreAJourSelecteurGroupes();
+    mettreAJourAffichage();
 });
